@@ -1,29 +1,40 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: dev-appset-simple
+  name: dev-appset
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
-    # Start with just git to see if that works
-    - git:
-        repoURL: https://github.com/rodmhgl/argo_repo_structure
-        revision: HEAD
-        directories:
-          - path: apps/*/envs/dev
+    - matrix:
+        generators:
+        - git:
+            repoURL: https://github.com/rodmhgl/argo_repo_structure
+            revision: HEAD
+            directories:
+              - path: apps/*/envs/dev
+        - clusters: # {}
+            selector:
+              matchLabels:
+                environment: "dev"
+                app: "api"
   template:
     metadata:
-      name: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}'
+      # Extract the app name from the path, then append the cluster name
+      name: '{{index .path.segments 1}}-{{.name}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/rodmhgl/argo_repo_structure
         targetRevision: HEAD
-        path: "{{ path }}"
+        path: '{{.path.path}}'
       destination:
-        # Use the specific server from your dev cluster
-        server: "https://gvku2j2rus-8lu8c1nc.hcp.eastus.azmk8s.io:443"
-        namespace: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}'
+        server: '{{.server}}'
+        namespace: '{{index .path.segments 1}}' #-{{index .path.segments 3}}'
+        # namespace: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}-{{ cluster.metadata.name }}'
       syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
         automated:
           prune: true
           selfHeal: true
