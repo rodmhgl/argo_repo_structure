@@ -1,10 +1,9 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: dev-appset-simple
+  name: dev-appset-debug
 spec:
   generators:
-    # Start with just git to see if that works
     - git:
         repoURL: https://github.com/rodmhgl/argo_repo_structure
         revision: HEAD
@@ -12,7 +11,8 @@ spec:
           - path: apps/*/envs/dev
   template:
     metadata:
-      name: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}'
+      # Most basic template possible - hardcoded names
+      name: 'test-app-1'
     spec:
       project: default
       source:
@@ -20,9 +20,8 @@ spec:
         targetRevision: HEAD
         path: "{{ path }}"
       destination:
-        # Use the specific server from your dev cluster
         server: "https://gvku2j2rus-8lu8c1nc.hcp.eastus.azmk8s.io:443"
-        namespace: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}'
+        namespace: 'test-namespace'
       syncPolicy:
         automated:
           prune: true

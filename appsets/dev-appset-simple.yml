@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dev-appset-matrix
+spec:
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/rodmhgl/argo_repo_structure
+              revision: HEAD
+              directories:
+                - path: apps/*/envs/dev
+          - list:
+              elements:
+                - cluster: dev-cluster
+                  server: https://gvku2j2rus-8lu8c1nc.hcp.eastus.azmk8s.io:443
+                  name: argocd-lab-api-dev-eastus
+  template:
+    metadata:
+      name: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}-{{ cluster }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/rodmhgl/argo_repo_structure
+        targetRevision: HEAD
+        path: "{{ path }}"
+      destination:
+        server: "{{ server }}"
+        namespace: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}-{{ cluster }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
