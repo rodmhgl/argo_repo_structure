@@ -6,7 +6,7 @@ resources:
 
 images:
 - name: gcr.io/kuar-demo/kuard-amd64
-  newTag: green # Valid values are: blue, green, or purple
+  newTag: purple # Valid values are: blue, green, or purple
   # newName: gcr.io/kuar-demo/kuard-amd64:blue
 
 patches:
