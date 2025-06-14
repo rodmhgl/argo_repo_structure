@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/rodmhgl/many-appsets-demo.git
+    repoURL: https://github.com/rodmhgl/argo_repo_structure.git
     targetRevision: HEAD
     path: appsets
   destination:
