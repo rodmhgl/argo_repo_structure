@@ -2,6 +2,6 @@
   { 
       "op": "replace", 
       "path": "/spec/rules/0/host", 
-      "value": "python-app-rm.azurelaboratory.com"
+      "value": "python-app.rm.azurelaboratory.com"
   }
 ]
