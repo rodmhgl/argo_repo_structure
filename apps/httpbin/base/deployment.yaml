@@ -15,7 +15,8 @@ spec:
         app: httpbin
     spec:
       containers:
-        - name: httpbin
-          image: kennethreitz/httpbin
+        - image: kennethreitz/httpbin
+          imagePullPolicy: IfNotPresent
+          name: httpbin
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
