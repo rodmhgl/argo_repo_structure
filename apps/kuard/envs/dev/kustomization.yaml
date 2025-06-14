@@ -7,7 +7,7 @@ resources:
 patches:
   - target:
       kind: Ingress
-      name: httpbin
+      name: kuard
     patch: |-
       - op: replace
         path: /spec/rules/0/host
