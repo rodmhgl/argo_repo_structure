@@ -15,8 +15,9 @@ spec:
         app: httpbin
     spec:
       containers:
-        - image: docker.io/mccutchen/go-httpbin:v2.15.0 # kennethreitz/httpbin
+        - image: kennethreitz/httpbin
+        # - image: docker.io/mccutchen/go-httpbin:v2.15.0 # kennethreitz/httpbin
           imagePullPolicy: IfNotPresent
           name: httpbin
           ports:
-            - containerPort: 8080
+            - containerPort: 80
