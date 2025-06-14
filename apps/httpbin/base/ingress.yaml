@@ -13,5 +13,5 @@ spec:
             service:
               name: httpbin
               port:
-                number: 8080
+                number: 8000
       host: httpbin.azurelaboratory.com
