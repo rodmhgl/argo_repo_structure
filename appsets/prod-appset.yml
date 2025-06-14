@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: prod-appset
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -14,23 +16,23 @@ spec:
         - clusters:
             selector:
               matchLabels:
-                environment: prod
-
+                environment: "prod"
+                app: "api"
   template:
     metadata:
-      # name it `<app>-<cluster>`
-      name: '{{ regexReplaceAll "apps/(.*)/envs/.*" path "$1" }}-{{ cluster.metadata.name }}'
+      name: '{{index .path.segments 1}}-{{.name}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/rodmhgl/argo_repo_structure
         targetRevision: HEAD
-        # this is exactly the folder the git generator gave us
-        path: "{{ path }}"
+        path: '{{.path.path}}'
       destination:
-        server: "{{ cluster.server }}"
-        namespace: '{{ regexReplaceAll "apps/(.*)/envs/.*" path "$1" }}-{{ cluster.metadata.name }}'
+        server: '{{.server}}'
+        namespace: '{{index .path.segments 1}}'
       syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
         automated:
           prune: true
           selfHeal: true

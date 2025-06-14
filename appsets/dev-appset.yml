@@ -13,14 +13,13 @@ spec:
             revision: HEAD
             directories:
               - path: apps/*/envs/dev
-        - clusters: # {}
+        - clusters:
             selector:
               matchLabels:
                 environment: "dev"
                 app: "api"
   template:
     metadata:
-      # Extract the app name from the path, then append the cluster name
       name: '{{index .path.segments 1}}-{{.name}}'
     spec:
       project: default
@@ -30,8 +29,7 @@ spec:
         path: '{{.path.path}}'
       destination:
         server: '{{.server}}'
-        namespace: '{{index .path.segments 1}}' #-{{index .path.segments 3}}'
-        # namespace: '{{ regexReplaceAll "apps/(.*)/envs/.*" "$1" path }}-{{ cluster.metadata.name }}'
+        namespace: '{{index .path.segments 1}}'
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
