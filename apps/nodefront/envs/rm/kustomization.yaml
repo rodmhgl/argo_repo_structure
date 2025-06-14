@@ -11,4 +11,4 @@ patches:
     patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: nodefront.dev.azurelaboratory.com
+        value: nodefront.rm.azurelaboratory.com
