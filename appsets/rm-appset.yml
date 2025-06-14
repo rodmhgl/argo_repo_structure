@@ -27,7 +27,7 @@ spec:
       
       # Destination cluster and namespace to deploy the application
       destination:
-        server: https://kubernetes.default.svc
+        server: https://vr30se7i0q-hjds9xn2.hcp.eastus.azmk8s.io:443
         namespace: '{{index .path.segments 1}}-{{index .path.segments 3}}'
 
       # Sync policy
