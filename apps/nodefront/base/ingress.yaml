@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nodefront-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-nonprod-dns
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  # tls:
+  #   - hosts:
+  #       - "nodefront.dev.azurelaboratory.com"
+  #     secretName: nodefront-tls
+  rules:
+    - host: nodefront.dev.azurelaboratory.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nodefront
+                port:
+                  number: 80  

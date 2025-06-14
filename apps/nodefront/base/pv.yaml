@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nodefront-page-files-pv
+  labels:
+    usage: nodefront-storage-claim
+spec:
+  storageClassName: azurefile
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  azureFile:
+    secretName: azure-pv-secret
+    shareName: app-pages-dev
+    readOnly: false
