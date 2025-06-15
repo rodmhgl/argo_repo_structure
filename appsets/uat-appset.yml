@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: qa-appset
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+        - git:
+            repoURL: https://github.com/rodmhgl/argo_repo_structure
+            revision: HEAD
+            directories:
+              - path: apps/*/envs/qa
+        - clusters:
+            selector:
+              matchLabels:
+                environment: "qa"
+                app: "api"
+  template:
+    metadata:
+      name: '{{index .path.segments 1}}-{{.name}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/rodmhgl/argo_repo_structure
+        targetRevision: HEAD
+        path: '{{.path.path}}'
+      destination:
+        server: '{{.server}}'
+        namespace: '{{index .path.segments 1}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: true
