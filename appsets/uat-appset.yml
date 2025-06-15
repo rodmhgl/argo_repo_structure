@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: qa-appset
+  name: uat-appset
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -12,11 +12,11 @@ spec:
             repoURL: https://github.com/rodmhgl/argo_repo_structure
             revision: HEAD
             directories:
-              - path: apps/*/envs/qa
+              - path: apps/*/envs/uat
         - clusters:
             selector:
               matchLabels:
-                environment: "qa"
+                environment: "uat"
                 app: "api"
   template:
     metadata:
